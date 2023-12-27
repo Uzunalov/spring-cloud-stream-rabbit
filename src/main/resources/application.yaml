@@ -1,0 +1,39 @@
+spring:
+  docker:
+    compose:
+      file: classpath:/infrastructure/docker-compose.yml
+
+  rabbitmq:
+    host: localhost
+    port: 5672
+    username: 'root'
+    password: 'rootpassword'
+    connection-timeout: 10000
+
+  cloud:
+    stream:
+      bindings:
+        sampleMessage-in-0:
+          destination: sample-message.dx
+          group: sample-message.q
+          consumer:
+            max-attempts: 1
+        sampleMessageProducer-out-0:
+          producer:
+            required-groups:
+              - sample-message.q
+          destination: sample-message-out.dx
+      rabbit:
+        bindings:
+          sampleMessage-in-0:
+            consumer:
+              queue-name-group-only: true
+              binding-routing-key: sample-message.rk
+              exchange-type: direct
+
+          sampleMessageProducer-out-0:
+            producer:
+              queue-name-group-only: true
+              binding-routing-key: sample-message-out.rk
+              routing-key-expression: '''sample-message-out.rk'''
+              exchange-type: direct

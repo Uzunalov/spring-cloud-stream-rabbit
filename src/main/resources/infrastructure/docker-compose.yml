@@ -1,0 +1,14 @@
+version: "3.5"
+
+services:
+  rabbitmq_container:
+    container_name: rabbit_sample
+    image: rabbitmq:3.8.9
+    environment:
+      - RABBITMQ_DEFAULT_USER=root
+      - RABBITMQ_DEFAULT_PASS=rootpassword
+    ports:
+      - 5672:5672
+      - 15672:15672
+    volumes:
+      - "./rabbit/enabled_plugins:/etc/rabbitmq/enabled_plugins"
